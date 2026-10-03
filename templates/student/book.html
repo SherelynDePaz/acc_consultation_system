@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Book a Consultation{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Book a Consultation</h1>
+  <p>Submit a request to a medical expert</p>
+</div>
+
+<div class="card" style="max-width:560px;">
+  <form method="POST">
+    <div class="field">
+      <label for="expert_id">Preferred Medical Expert (optional)</label>
+      <select id="expert_id" name="expert_id">
+        <option value="">Any available expert / no preference</option>
+        {% for e in experts %}
+        <option value="{{ e.id }}">{{ e.full_name }}{% if e.specialization %} — {{ e.specialization }}{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="reason">Reason for Consultation</label>
+      <textarea id="reason" name="reason" placeholder="Describe your symptoms or concern..." required></textarea>
+    </div>
+
+    <div class="field">
+      <label for="preferred_date">Preferred Date</label>
+      <input type="date" id="preferred_date" name="preferred_date" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+  </form>
+</div>
+
+<a href="{{ url_for('student.dashboard') }}">&larr; Back to dashboard</a>
+{% endblock %}

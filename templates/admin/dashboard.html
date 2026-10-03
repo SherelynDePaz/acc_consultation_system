@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Super Admin Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Super Admin Dashboard</h1>
+  <p>System-wide overview of the ACC Consultation System</p>
+</div>
+
+<div class="grid grid-3" style="margin-bottom:1.8rem;">
+  <div class="stat-card">
+    <div class="num">{{ stats.total_students }}</div>
+    <div class="label">Total Students</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.total_experts }}</div>
+    <div class="label">Approved Medical Experts</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.pending_experts }}</div>
+    <div class="label">Experts Awaiting Approval</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.total_consultations }}</div>
+    <div class="label">Total Consultations</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.pending_consultations }}</div>
+    <div class="label">Pending Consultations</div>
+  </div>
+</div>
+
+{% if stats.pending_experts > 0 %}
+<div class="flash flash-warning">
+  {{ stats.pending_experts }} medical expert account(s) are awaiting your approval.
+  <a href="{{ url_for('admin.manage_experts') }}">Review now &rarr;</a>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Recent Consultations</h2>
+  {% if recent %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Student</th><th>Medical Expert</th><th>Reason</th><th>Preferred Date</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for c in recent %}
+        <tr>
+          <td>{{ c.student_name }}</td>
+          <td>{{ c.expert_name or '— Unassigned —' }}</td>
+          <td>{{ c.reason }}</td>
+          <td>{{ c.preferred_date }}</td>
+          <td><span class="status status-{{ c.status }}">{{ c.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:1rem;"><a href="{{ url_for('admin.all_consultations') }}">View all consultations &rarr;</a></p>
+  {% else %}
+  <div class="empty-state">No consultations have been booked yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

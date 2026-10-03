@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Medical Expert Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Medical Expert Dashboard</h1>
+  <p>Review, claim, and respond to consultation requests</p>
+</div>
+
+<div class="card">
+  <h2>Unassigned Requests</h2>
+  <p style="color:var(--text-muted); margin-top:-0.5rem;">Any student request not yet claimed by an expert.</p>
+  {% if unassigned %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Student</th><th>Reason</th><th>Preferred Date</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in unassigned %}
+        <tr>
+          <td>{{ c.student_name }}</td>
+          <td>{{ c.reason }}</td>
+          <td>{{ c.preferred_date }}</td>
+          <td><a class="btn btn-sm btn-primary" href="{{ url_for('expert.claim', cid=c.id) }}">Claim</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No unassigned requests right now.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Pending Your Response</h2>
+  {% if pending %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Student</th><th>Reason</th><th>Preferred Date</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in pending %}
+        <tr>
+          <td>{{ c.student_name }}</td>
+          <td>{{ c.reason }}</td>
+          <td>{{ c.preferred_date }}</td>
+          <td><a class="btn btn-sm btn-outline" href="{{ url_for('expert.consultation', cid=c.id) }}">Review</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">Nothing pending your response.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Upcoming (Accepted)</h2>
+  {% if upcoming %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Student</th><th>Reason</th><th>Preferred Date</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in upcoming %}
+        <tr>
+          <td>{{ c.student_name }}</td>
+          <td>{{ c.reason }}</td>
+          <td>{{ c.preferred_date }}</td>
+          <td><a class="btn btn-sm btn-outline" href="{{ url_for('expert.consultation', cid=c.id) }}">Open</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No upcoming consultations.</div>
+  {% endif %}
+</div>
+{% endblock %}

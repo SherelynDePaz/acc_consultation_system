@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Welcome - ACC Consultation System{% endblock %}
+
+{% block hero %}
+<div class="hero">
+  <h1>ACC Consultation System</h1>
+  <p>A simple, role-based platform connecting students with medical experts for consultations,
+     with a super admin overseeing accounts and activity.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Get Started</a>
+    <a class="btn btn-outline" href="{{ url_for('auth.login') }}">Log In</a>
+  </div>
+</div>
+<div class="features">
+  <div class="feature-card">
+    <h3>🛡️ Super Admin</h3>
+    <p>Approves medical expert accounts, manages students and experts, and monitors every consultation in the system.</p>
+  </div>
+  <div class="feature-card">
+    <h3>🩺 Medical Expert</h3>
+    <p>Reviews consultation requests, accepts or declines them, and records notes and outcomes.</p>
+  </div>
+  <div class="feature-card">
+    <h3>🎓 Student</h3>
+    <p>Books a consultation with an available medical expert and tracks the status of each request.</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}

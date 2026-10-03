@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ACC Consultation System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="navbar">
+    <a class="brand" href="{{ url_for('index') }}">🩺 ACC Consultation System</a>
+    <nav>
+      {% if current_user_role == 'super_admin' %}
+        <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin.manage_experts') }}">Medical Experts</a>
+        <a href="{{ url_for('admin.manage_students') }}">Students</a>
+        <a href="{{ url_for('admin.all_consultations') }}">Consultations</a>
+      {% elif current_user_role == 'medical_expert' %}
+        <a href="{{ url_for('expert.dashboard') }}">Dashboard</a>
+      {% elif current_user_role == 'student' %}
+        <a href="{{ url_for('student.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student.book') }}">Book Consultation</a>
+      {% endif %}
+
+      {% if current_user_role %}
+        <span class="badge-role">{{ current_user_role.replace('_', ' ') }}</span>
+        <span>{{ current_user_name }}</span>
+        <a class="btn-logout" href="{{ url_for('auth.logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}">Log in</a>
+        <a class="btn-logout" href="{{ url_for('auth.register') }}">Register</a>
+      {% endif %}
+    </nav>
+  </div>
+
+  {% block hero %}{% endblock %}
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>&copy; 2026 ACC Consultation System &mdash; Super Admin · Medical Expert · Student</footer>
+</body>
+</html>

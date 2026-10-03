@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Manage Medical Experts{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Manage Medical Experts</h1>
+  <p>Approve new applications and manage existing medical expert accounts</p>
+</div>
+
+<div class="card">
+  {% if experts %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Specialization</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for e in experts %}
+        <tr>
+          <td>{{ e.full_name }}</td>
+          <td>{{ e.email }}</td>
+          <td>{{ e.specialization or '—' }}</td>
+          <td>
+            {% if not e.is_approved %}
+              <span class="status status-pending">Pending Approval</span>
+            {% elif not e.is_active %}
+              <span class="status status-cancelled">Deactivated</span>
+            {% else %}
+              <span class="status status-completed">Active</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="link-row">
+              {% if not e.is_approved %}
+                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_expert', user_id=e.id) }}">Approve</a>
+                <a class="btn btn-sm btn-danger" href="{{ url_for('admin.reject_expert', user_id=e.id) }}"
+                   onclick="return confirm('Reject and remove this application?');">Reject</a>
+              {% else %}
+                <a class="btn btn-sm btn-outline" href="{{ url_for('admin.toggle_active', user_id=e.id) }}">
+                  {{ 'Deactivate' if e.is_active else 'Reactivate' }}
+                </a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No medical expert accounts have registered yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

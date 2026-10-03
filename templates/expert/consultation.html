@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Consultation Detail{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Consultation Request</h1>
+  <p>From {{ c.student_name }} ({{ c.student_email }})</p>
+</div>
+
+<div class="card">
+  <p><strong>Reason:</strong> {{ c.reason }}</p>
+  <p><strong>Preferred Date:</strong> {{ c.preferred_date }}</p>
+  <p><strong>Status:</strong> <span class="status status-{{ c.status }}">{{ c.status }}</span></p>
+  <p><strong>Requested on:</strong> {{ c.created_at }}</p>
+
+  {% if c.status in ['pending', 'accepted'] %}
+  <form method="POST" style="margin-top:1.2rem;">
+    <div class="field">
+      <label for="expert_notes">Notes for this consultation</label>
+      <textarea id="expert_notes" name="expert_notes">{{ c.expert_notes or '' }}</textarea>
+    </div>
+    <div class="link-row">
+      {% if c.status == 'pending' %}
+        <button type="submit" class="btn btn-success" name="action" value="accept">Accept</button>
+        <button type="submit" class="btn btn-danger" name="action" value="decline">Decline</button>
+      {% elif c.status == 'accepted' %}
+        <button type="submit" class="btn btn-success" name="action" value="complete">Mark as Completed</button>
+        <button type="submit" class="btn btn-danger" name="action" value="decline">Decline / Cancel</button>
+      {% endif %}
+    </div>
+  </form>
+  {% else %}
+  <p><strong>Notes:</strong> {{ c.expert_notes or '—' }}</p>
+  {% endif %}
+</div>
+
+<a href="{{ url_for('expert.dashboard') }}">&larr; Back to dashboard</a>
+{% endblock %}
